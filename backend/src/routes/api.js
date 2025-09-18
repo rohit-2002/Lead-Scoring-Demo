@@ -10,9 +10,9 @@ import { FileService } from "../services/fileService.js";
 
 const router = express.Router();
 
-// Configure multer with Cloudinary storage for production, memory for development
+// Configure multer with memory storage for reliability
 const upload = multer({
-  storage: process.env.NODE_ENV === 'production' ? storage : multer.memoryStorage(),
+  storage: multer.memoryStorage(),
   limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
   fileFilter: (req, file, cb) => {
     if (file.mimetype === 'text/csv' || file.originalname.endsWith('.csv')) {
@@ -43,17 +43,28 @@ router.post(
     }
 
     try {
+      console.log('Processing CSV upload, file info:', {
+        originalname: req.file.originalname,
+        mimetype: req.file.mimetype,
+        size: req.file.size,
+        hasBuffer: !!req.file.buffer,
+        hasPath: !!req.file.path
+      });
+
       let leads = [];
 
-      if (process.env.NODE_ENV === 'production' && req.file.path) {
-        // Production: Process from Cloudinary URL
+      // Always try buffer first, then fallback to Cloudinary if available
+      if (req.file.buffer) {
+        console.log('Processing CSV from memory buffer');
+        leads = await FileService.processCSVFromBuffer(req.file.buffer);
+      } else if (req.file.path) {
         console.log('Processing CSV from Cloudinary:', req.file.path);
         leads = await FileService.processCSVFromCloudinary(req.file.path);
       } else {
-        // Development: Process from memory buffer
-        console.log('Processing CSV from memory buffer');
-        leads = await FileService.processCSVFromBuffer(req.file.buffer);
+        throw new Error('No file buffer or path available');
       }
+
+      console.log(`Parsed ${leads.length} leads from CSV`);
 
       if (leads.length === 0) {
         return res.status(400).json({
@@ -66,15 +77,13 @@ router.post(
       await Lead.deleteMany({});
       const created = await Lead.insertMany(leads);
 
+      console.log(`Successfully created ${created.length} leads in database`);
+
       res.json({
         ok: true,
         count: created.length,
         leads: created.map((l) => l._id),
-        message: `Successfully processed ${created.length} leads`,
-        fileInfo: process.env.NODE_ENV === 'production' ? {
-          cloudinaryUrl: req.file.path,
-          publicId: req.file.filename
-        } : null
+        message: `Successfully processed ${created.length} leads`
       });
     } catch (err) {
       console.error("CSV upload error:", err);
