@@ -83,6 +83,27 @@ function App() {
     });
   }, [offerId, fetchResults]);
 
+  const clearAllData = useCallback(async () => {
+    if (
+      !confirm(
+        "Are you sure you want to delete all leads and results? This action cannot be undone."
+      )
+    ) {
+      return;
+    }
+
+    await withLoading(async () => {
+      try {
+        const { data } = await api.delete("/leads");
+        setResults([]);
+        alert(data.message || "All data cleared successfully");
+      } catch (error) {
+        console.error("Error clearing data:", error);
+        alert("Failed to clear data. Please try again.");
+      }
+    });
+  }, []);
+
   useEffect(() => {
     if (token) {
       fetchResults();
@@ -104,17 +125,30 @@ function App() {
         </div>
 
         <div className="mt-4 flex justify-between items-center">
-          <button
-            onClick={runScoring}
-            disabled={loading}
-            className={`px-4 py-2 rounded text-white ${
-              loading
-                ? "bg-indigo-400 cursor-not-allowed"
-                : "bg-indigo-600 hover:bg-indigo-700"
-            }`}
-          >
-            {loading ? "Running..." : "Run Scoring"}
-          </button>
+          <div className="flex gap-3">
+            <button
+              onClick={runScoring}
+              disabled={loading}
+              className={`px-4 py-2 rounded text-white ${
+                loading
+                  ? "bg-indigo-400 cursor-not-allowed"
+                  : "bg-indigo-600 hover:bg-indigo-700"
+              }`}
+            >
+              {loading ? "Running..." : "Run Scoring"}
+            </button>
+            <button
+              onClick={clearAllData}
+              disabled={loading}
+              className={`px-4 py-2 rounded text-white ${
+                loading
+                  ? "bg-orange-400 cursor-not-allowed"
+                  : "bg-orange-600 hover:bg-orange-700"
+              }`}
+            >
+              Clear All Data
+            </button>
+          </div>
           <button
             onClick={handleLogout}
             className="px-4 py-2 rounded text-white bg-red-600 hover:bg-red-700"
