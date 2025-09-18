@@ -88,18 +88,15 @@ This application is deployed on Render:
 
 - Build: `cd frontend && npm install && npm run build`
 - Publish: `frontend/dist`
-- API URL: `https://lead-scoring-backend-u8ct.onrender.com`
 
 ## Live Demo
 
-🚀 **Try it now**: https://lead-scoring-demo.onrender.com
+🚀 **Try it now**: https://lead-scoring-frontend.onrender.com
 
 **Demo Credentials:**
 
 - Username: `admin`
 - Password: `password`
-
-**API Endpoint**: https://lead-scoring-backend-u8ct.onrender.com
 
 ## Sample Data
 
