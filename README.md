@@ -4,12 +4,12 @@ AI-powered lead qualification system with React frontend and Node.js backend.
 
 ## Features
 
-- CSV lead upload and AI-powered scoring
-- Interactive dashboard with charts and filters
-- Google Gemini AI integration
-- JWT authentication
-- Cloudinary file storage
-- Render deployment ready
+- **CSV Upload**: Import leads with name, role, company, industry, location, LinkedIn bio
+- **AI Scoring**: Google Gemini AI analyzes lead quality and intent
+- **Interactive Dashboard**: Charts showing lead distribution and scoring results
+- **Data Management**: Clear old records, export results to CSV
+- **Real-time Filtering**: Filter leads by intent (High, Medium, Low)
+- **Secure Authentication**: JWT-based login system
 
 ## Tech Stack
 
@@ -74,39 +74,33 @@ npm run dev
 
 - `VITE_API_URL` - Backend API URL
 
-## Deployment on Render
+## Deployment
 
-### Option 1: Using render.yaml (Recommended)
+This application is deployed on Render:
 
-1. Fork this repository to your GitHub account
-2. Connect your GitHub account to [Render](https://render.com)
-3. Create a new "Blueprint" and select your forked repository
-4. Render will automatically detect the `render.yaml` file and create both services
-5. Set the required environment variables in the Render dashboard:
-   - `MONGO_URI` - Your MongoDB connection string
-   - `GEMINI_API_KEY` - Your Google AI API key
-   - `JWT_SECRET` - A secure random string
-   - `CLOUDINARY_*` - Your Cloudinary credentials
+**Backend Service:**
 
-### Option 2: Manual Setup
+- Build: `cd backend && npm install`
+- Start: `cd backend && npm start`
+- Environment: MongoDB, Gemini AI, JWT secrets
 
-**Backend:**
+**Frontend Service:**
 
-1. Create a new Web Service on Render
-2. Connect your repository
-3. Set build command: `cd backend && npm install`
-4. Set start command: `cd backend && npm start`
-5. Add environment variables
+- Build: `cd frontend && npm install && npm run build`
+- Publish: `frontend/dist`
+- API URL: `https://lead-scoring-backend-u8ct.onrender.com`
 
-**Frontend:**
+## Live Demo
 
-1. Create a new Static Site on Render
-2. Connect your repository
-3. Set build command: `cd frontend && npm install && npm run build`
-4. Set publish directory: `frontend/dist`
-5. Set `VITE_API_URL` to your backend service URL
+🚀 **Try it now**: https://lead-scoring-demo.onrender.com
 
-### Live Demo
+**Demo Credentials:**
 
-- Frontend: https://your-frontend-app.onrender.com
-- Backend API: https://your-backend-app.onrender.com
+- Username: `admin`
+- Password: `password`
+
+**API Endpoint**: https://lead-scoring-backend-u8ct.onrender.com
+
+## Sample Data
+
+Use the included `sample-leads.csv` file with 15 realistic lead profiles to test the AI scoring functionality.
