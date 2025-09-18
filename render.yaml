@@ -27,10 +27,8 @@ services:
         value: https://lead-scoring-frontend.onrender.com
 
   # Frontend Static Site
-  - type: web
+  - type: static
     name: lead-scoring-frontend
-    env: static
-    plan: free
     buildCommand: cd frontend && npm install && npm run build
     staticPublishPath: frontend/dist
     envVars:
