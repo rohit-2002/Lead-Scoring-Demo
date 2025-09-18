@@ -37,6 +37,15 @@ const Login = ({ onLogin }) => {
           <h2 className="text-2xl font-semibold mb-4 text-center">
             Lead Scoring Demo
           </h2>
+          <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded text-sm text-center">
+            <div className="text-blue-800 font-medium">Demo Login</div>
+            <div className="text-blue-600">
+              Username: <span className="font-mono">admin</span>
+            </div>
+            <div className="text-blue-600">
+              Password: <span className="font-mono">password</span>
+            </div>
+          </div>
           {error && <div className="mb-2 text-red-600">{error}</div>}
           <div className="mb-2">
             <label className="block mb-1">Username</label>
